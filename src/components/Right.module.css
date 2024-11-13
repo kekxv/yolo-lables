@@ -1,0 +1,11 @@
+.Right {
+  position: fixed;
+  top: 80px;
+  right: 0;
+  bottom: 0;
+  width: 350px;
+  border-left: 1px solid #b1b1b1;
+  font-family: Consolas, Monaco, monospace;
+  font-size: 14px;
+  overflow: scroll;
+}
