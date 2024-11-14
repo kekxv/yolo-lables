@@ -40,9 +40,8 @@ let last_model = null;
  * 显示提示
  * @param type {'warning'|'danger'|'success'|'info'}
  * @param message {string}
- * @param timeout {number}
  */
-function toastShow(type, message, timeout) {
+function toastShow(type, message) {
   setToast('messages', toast.messages.length, {type, message});
 }
 
@@ -181,11 +180,19 @@ function App() {
         show={config.show}
         onUpdateModel={(model) => {
           yolo.init(model).then((result) => {
+            if (result) {
+              toastShow("success", "加载成功")
+            } else {
+              toastShow("danger", "加载失败")
+            }
             console.log("init model", result);
           });
         }}
         onUpdateLabels={(labels) => {
           yolo.update_classes(labels);
+          setTimeout(() => {
+            toastShow("success", "已经更新 Labels 数据")
+          })
         }}
         close={() => {
           setConfig({show: false})
