@@ -1,0 +1,36 @@
+name: build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14]
+        # node-version: [10, 12, 14, 16, 18]
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: npm-version
+        run: npm version
+      # 安装依
+      - name: install
+        run: npm i --registry https://registry.npmmirror.com
+      # 构建
+      - name: build
+        run: npm run build
+      - uses: actions/upload-artifact@v3
+        with:
+          name: yolo-lables.node${{ matrix.node-version }}
+          path: dist
