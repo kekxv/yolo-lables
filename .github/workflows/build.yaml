@@ -40,7 +40,7 @@ jobs:
       - name: deploy
         uses: peaceiris/actions-gh-pages@v4
         #if: github.ref == 'refs/heads/main' and  env.env_pages != ''
-        if: ${{ env.env_pages == '' &&  github.ref == 'refs/heads/main' }}
+        if: ${{ env.env_pages != '' &&  github.ref == 'refs/heads/main' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
