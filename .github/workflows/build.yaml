@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ main ]
 
+env:
+  env_pages: ${{ vars.PAGES }}
+
 jobs:
   build:
 
@@ -13,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18]
+        node-version: [ 18 ]
         # node-version: [10, 12, 14, 16, 18]
 
     steps:
@@ -30,7 +33,14 @@ jobs:
       # 构建
       - name: build
         run: npm run build
-      - uses: actions/upload-artifact@v3
+      # - uses: actions/upload-artifact@v4
+      #   with:
+      #     name: yolo-lables.node${{ matrix.node-version }}
+      #     path: dist
+      - name: deploy
+        uses: peaceiris/actions-gh-pages@v4
+        #if: github.ref == 'refs/heads/main' and  env.env_pages != ''
+        if: ${{ env.env_pages == '' &&  github.ref == 'refs/heads/main' }}
         with:
-          name: yolo-lables.node${{ matrix.node-version }}
-          path: dist
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
