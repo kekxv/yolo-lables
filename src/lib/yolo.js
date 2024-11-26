@@ -151,12 +151,15 @@ export default class Yolo {
   }
 
   async init(model) {
+    console.log("开始加载模型")
     // 加载模型
     try {
       this.#session = await ort_webgpu.InferenceSession.create(model, {executionProviders: ["webgpu"]});
     } catch (e) {
-      console.debug(e);
+      console.warn(e);
       this.#session = await ort.InferenceSession.create(model);
+    }finally {
+      console.log("模型加载结束")
     }
     return !this.empty();
   }

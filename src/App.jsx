@@ -158,7 +158,9 @@ function App() {
             toastShow("warning", "请先选择文件")
             return;
           }
+          console.time("yoloDetect")
           let boxs = await yoloDetect({image: store.file.url});
+          console.timeEnd("yoloDetect")
           setStore('files', store.index, 'labels', boxs);
           setStore({file: store.files[store.index]})
           console.log(boxs)
@@ -183,14 +185,19 @@ function App() {
       <ConfigDrawer
         show={config.show}
         onUpdateModel={(model) => {
-          yolo.init(model).then((result) => {
-            if (result) {
-              toastShow("success", "加载成功")
-            } else {
-              toastShow("danger", "加载失败")
-            }
-            console.log("init model", result);
-          });
+          yolo.init(model)
+            .then((result) => {
+              if (result) {
+                toastShow("success", "加载成功")
+              } else {
+                toastShow("danger", "加载失败")
+              }
+              console.log("init model", result);
+            })
+            .catch((e) => {
+              console.error("加载失败", e);
+              toastShow("danger", "加载失败:" + (e.message || JSON.stringify(e)))
+            });
         }}
         onUpdateLabels={(labels) => {
           yolo.update_classes(labels);
