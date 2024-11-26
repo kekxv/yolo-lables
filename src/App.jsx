@@ -161,6 +161,8 @@ function App() {
           let boxs = await yoloDetect({image: store.file.url});
           setStore('files', store.index, 'labels', boxs);
           setStore({file: store.files[store.index]})
+          console.log(boxs)
+          toastShow("info", "识别结束")
         }}
         yoloDetectAll={async () => {
           if (store.files.length === 0) {
@@ -170,9 +172,11 @@ function App() {
           for (let i in store.files) {
             let boxs = await yoloDetect({image: store.files[i].url});
             await sleep(1);
+            console.log(boxs)
             setStore('files', i, 'labels', boxs);
           }
           setStore({file: store.files[store.index]})
+          toastShow("info", "识别结束")
         }}
       >
       </Footer>
